@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="style.css" />
+
+
+    <script
+      src="https://kit.fontawesome.com/c2a3ad07ff.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- 네비바 시작-->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">군생활 테스트</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav"></ul>
+        </div>
+      </div>
+    </nav>
+    <!-- 네비바 끝-->
+    <!-- Machine Model -->
+
+    <!-- 코드펜 예제 시작 -->
+    <div class="container">
+      <h1>
+        딥러닝 AI 군생활 테스트
+        <small>AI가 관상을 분석해 군생활을 예측해줍니다.</small>
+        <small>아래 연필버튼을 눌러 셀카를 업로드해보세요.</small>
+      </h1>
+      <div class="avatar-upload">
+        <div class="avatar-edit">
+          <input type="file" id="imageUpload" accept=".png, .jpg, .jpeg" />
+          <label for="imageUpload" style="background-color:rgb(147, 247, 134)"></label>
+        </div>
+        <div class="avatar-preview">
+          <div
+            id="imagePreview"
+            style="background-image: url(img/army.jpg)"
+          ></div>
+          <img
+            class="filesample"
+            id="face-image"
+            src="img/army.jpg"
+            
+          />
+        </div>
+        <div><p class="result-message"></p></div>
+        <div id="label-container"></div>
+      </div>
+    </div>
+
+    <!-- 코드펜 예제 끝 -->
+
+    <div id="webcam-container"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
+    <!-- 부트스트랩 시작 -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    -->
+    <!-- 부트스트랩 끝 -->
+
+    <!-- jQuery 시작 -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script>
+      jQuery(document).ready(function ($) {
+        // code ...
+      });
+    </script>
+    <!-- jQuery 끝 -->
+
+    <!-- 코드펜 js 시작 -->
+
+    <script>
+      function readURL(input) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            $("#imagePreview").css(
+              "background-image",
+              "url(" + e.target.result + ")"
+            );
+            $("#imagePreview").hide();
+            $("#imagePreview").fadeIn(650);
+            $("#face-image").attr("src", e.target.result);
+          };
+          reader.readAsDataURL(input.files[0]);
+        }
+      }
+      $("#imageUpload").change(function () {
+        readURL(this);
+        init().then(() => {
+          predict();
+        });
+      });
+    </script>
+
+    <!-- 코드펜 js 끝 -->
+
+    <script type="text/javascript">
+      // More API functions here:
+      // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/image
+
+      // the link to your model provided by Teachable Machine export panel
+      const URL = "https://teachablemachine.withgoogle.com/models/zvuQeLXs1/";
+
+      let model, webcam, labelContainer, maxPredictions;
+
+      // Load the image model and setup the webcam
+      async function init() {
+        const modelURL = URL + "model.json";
+        const metadataURL = URL + "metadata.json";
+
+        // load the model and metadata
+        // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
+        // or files from your local hard drive
+        // Note: the pose library adds "tmImage" object to your window (window.tmImage)
+        model = await tmImage.load(modelURL, metadataURL);
+        maxPredictions = model.getTotalClasses();
+
+        labelContainer = document.getElementById("label-container");
+        for (let i = 0; i < maxPredictions; i++) {
+          // and class labels
+          labelContainer.appendChild(document.createElement("div"));
+        }
+      }
+
+      // run the webcam image through the image model
+      async function predict() {
+        // predict can take in an image, video or canvas html element
+        var image = document.getElementById("face-image");
+        console.log(image)
+        const prediction = await model.predict(image, false);
+
+        prediction.sort(
+          (a, b) => parseFloat(b.probability) - parseFloat(a.probability)
+        );
+
+
+        var resultMessage, resultExplain;
+        switch (prediction[0].className) {
+          case "Class1":
+            resultMessage = "1인분 타입";
+            resultExplain =
+              "&nbsp;모든게 평균 이상으로 작업, 주특기 모두 1인분 이상 해내는 타입.<br> 선임에게도 예의를 적절히 갖추고 후임도 지킬것만 지키면 터치하지 않으며 두루두루 잘 지냄.<br> 같이 근무서면 재미는 없는데 사회에 나가서 무슨 일 할지 같이 걱정하면서 시간 보냄.";
+            break;
+          case "Class2":
+            resultMessage = "특수보직 타입";
+            resultExplain =
+              "&nbsp;군종병, 1호차 운전병 등 묘하게 꿀빠는 것 처럼 보이는데 알고보면 빡센 일 하고있는 타입.<br> 자기 할 일 하느라 생활관에서 잘 안보이는데 가끔 나타나서 말 걸면 스트레스 심하게 받은 상태라 띠겁고 예민함.<br> 한명 잡아서 장난치기 시작하면 끝도 없어서 가까이 안 가는게 상책.";
+            break;
+          case "Class3":
+            resultMessage = "불만가득 에이스 타입";
+            resultExplain =
+              "&nbsp;작업 개잘하고 주특기도 에이스급인데 화가 가득차있음. 뭘 해도 투덜거리고 얼굴에 불만이 가득함.<br> 근데 또 일은 잘해서 간부들이나 선임들이 칭찬 많이함.<br> 훈련때 안보이면 행보관이 데려가서 어디서 나무자르고 있거나 제초작업 하고있을 가능성이 높음.<br> 근무 서면 근무시간 내내 FM으로 털리거나 아무말도 안함";
+            break;
+          case "Class4":
+            resultMessage = "부산 풀코스 타입";
+            resultExplain =
+              "&nbsp;뭔진 모르겠는데 자기가 부산의 통이었고 부산만 오면 풀코스로 모시겠다고 함. 부산에선 짱을 통이라고 함.<br> 막상 부산 가면 뻘쭘하게 만나서 돼지국밥 한그릇 하고 바다 한번 보고 술먹으러 가까예..? 하면 병아리같은 치킨만 파는 호프집가서 맥주 마시는게 다임.<br> 연락이 안되는 경우도 파다함.";
+            break;
+          case "Class5":
+            resultMessage = "개웃긴 또라이 타입";
+            resultExplain =
+              "&nbsp;같이 있으면 미친듯이 웃김. 갓 전입왔는데 생활관에 이사람 있으면 점호때 웃음참느라 고생함.<br> 일이나 훈련은 잘 못해도 혼은 잘 안남.<br> 가끔 진지충 선임한테 털리기도 하는데 본인은 별로 신경 안씀.<br> 대신 사고칠까봐 간부들이 무서워함. 탄약고에서 담배피기 등등.";
+            break;
+          case "Class6":
+            resultMessage = "군대 늦게 들어온 타입";
+            resultExplain =
+              "&nbsp;얼굴만 보면 행보관인데 늦게 군대 온 관상임.<br> 조직생활하다가 들어온 경우가 있어서 좀 조심해야함.<br> 의외로 조용히 군생활 하고 가려고 해서 선임 깍듯하게 대하고 후임은 잘 챙겨줌.<br> 근데 선임들이 부담스러워함.";
+            break;
+          case "Class7":
+            resultMessage = "개폐급 관심병사 타입";
+            resultExplain =
+              "&nbsp;전투모부터 이상하게 쓰고있음. 훈련이든 작업이든 근무든 하고있는거 보고있으면 개답답해서 한숨만 나옴.<br> 선임들이 답답해서 털고싶어도 툭 건드리면 전투화끈 풀어서 화장실로 갈 것 같은 자살페이스하고 있어서 포기함.<br> CCTV병 같은 이상한 보직 받거나 행보관 또는 중대장이 항상 데리고 다님.<br> 그러다가 그린캠프 가거나 중대 내 투명인간됨.";
+            break;
+          case "Class8":
+            resultMessage = "탈영각 보이는 개또라이 선임 타입";
+            resultExplain =
+              "&nbsp;자대갔는데 이런 얼굴 보이면 탈영해야함. 사람을 이런 방식으로도 털 수 있구나 하는 생각이 들 정도로 멘탈 탈수기임.<br> 말투부터 범상치 않은 경우가 많음.<br> 후임을 너무 잘 갈궈서 선임들이  다른 후임 털고있는거 보면 웃길때도 있어서 조심해야함.<br> 같이 근무설때 재밌는 이야기 준비 안해가면 개털릴 준비 해야함. 웃는 순간 나한테도 화살이 돌아옴.<br>사회에서 만나면 자기는 애들 갈궜던거 기억도 못하고 애들이 다 자기 좋아했다고 함.";
+            break;
+          case "Class9":
+            resultMessage = "알고보면 천사타입";
+            resultExplain =
+              "&nbsp;얼굴만 보면 무서운데 알고보면 착한 선임.<br> 가까이 가면 분유 냄새 같은거 남.<br> 대신 하는 것 마다 어설퍼서 선임들한테는 털리고 다님.<br> 그래도 자기가 후임들 혼내지는 않음.<br> 같이 근무 들어가면 조용히 졸고있을 확률이 높음.<br> 대신 가끔 탄입대에 간식 숨겨와서 부사수랑 같이 먹음.<br> 짬통 국물 원샷할시 전역가능? 이라는 질문에 진지하게 고민함.";
+            break;
+          case "Class10":
+            resultMessage = "투페이스 타입";
+            resultExplain =
+              "&nbsp;분명 이등병때부터 상병 초중반까진 천사에 작업도 잘하는 에이스 선임이었는데, 병장 달고나서 군생활에 현타 씨게 느낀 이후부터 악마로 바뀌는 얼굴임.<br> 분대장 교육대 가서 1등하고 돌아와서 포상휴가 같은것도 많이 나감.<br> 신기할 정도로 못하는게 없는데 병장때부터 아무것도 안하려고 하고 누워서 잠만자는 짬병장이 되거나 악마로 변해서 좀 친해진 일병 괴롭히는 재미로 지냄.";
+            break;
+          case "Class11":
+            resultMessage = "에이스 분대장 타입";
+            resultExplain =
+              "&nbsp;모든것을 S급으로 해내는 타입.<br> 군생활 처음부터 끝까지 흐트러짐이 없어서 간부들이 좋아하고 행보관이 심심하면 전문하사 해보라고 권유함.<br> 개인정비 시간에 안보이면 체력단련장 가서 운동하고 있음";
+            break;
+          case "Class12":
+            resultMessage = "귀여움 받아서 조심해야하는 타입";
+            resultExplain =
+              "&nbsp;소대장이랑 선임들이 귀여워함.<br> 개또라이 선임이 잘때 끌어안고 자려고 해서 조심해야함.<br> 샤워할땐 더 조심해야함.";
+            break;
+          case "Class13":
+            resultMessage = "진지충 FM 타입";
+            resultExplain =
+              "&nbsp;같이 근무서면 두시간 내내 개진지한 이야기만 하거나 진짜 가만히 근무만 서는 FM 선임.<br> 전투복이고 모포고 관물대고 모든것에 각이 잡혀있음.<br>점호 끝나면 제일 먼저 행정반 가서 연등신청해서 사회 나가서 할 공부 미리 하고있음.<br> 후임 터치 잘 안하는데 위험한 훈련때는 윽박 많이 지름.";
+            break;
+          default:
+            resultMessage = "알수없음";
+            resultExplain = "다른 사진으로 재시도해주세요!";
+        }
+        var title =
+          "<div class='" +
+          prediction[0].className +
+          "-army-title'>" +
+          resultMessage +
+          "</div>";
+        var explain =
+          "<div class='army-explain pt-2'>" + resultExplain + "</div>";
+        $(".result-message").html(title + explain);
+        var barWidth;
+        for (let i = 0; i < maxPredictions; i++) {
+          if (prediction[i].probability.toFixed(2) > 0.1) {
+            barWidth =
+              Math.round(prediction[i].probability.toFixed(2) * 100) + "%";
+          } else if (prediction[i].probability.toFixed(2) >= 0.01) {
+            barWidth = "4%";
+          } else {
+            barWidth = "2%";
+          }
+          var labelTitle;
+          switch (prediction[i].className) {
+            case "Class1":
+              labelTitle = "1인분 타입";
+              break;
+            case "Class2":
+              labelTitle = "특수보직 타입";
+              break;
+            case "Class3":
+              labelTitle = "불만가득 에이스 타입";
+              break;
+            case "Class4":
+              labelTitle = "부산 풀코스 타입";
+              break;
+            case "Class5":
+              labelTitle = "개웃긴 또라이 타입";
+              break;
+            case "Class6":
+              labelTitle = "군대 늦게 들어온 타입";
+              break;
+            case "Class7":
+              labelTitle = "개폐급 관심병사 타입";
+              break;
+            case "Class8":
+              labelTitle = "탈영각 보이는 개또라이 선임 타입";
+              break;
+            case "Class9":
+              labelTitle = "알고보면 천사타입";
+              break;
+            case "Class10":
+              labelTitle = "투페이스 타입";
+              break;
+            case "Class11":
+              labelTitle = "에이스 분대장 타입";
+              break;
+            case "Class12":
+              labelTitle = "귀여움 받아서 조심해야하는 타입";
+              break;
+            case "Class13":
+              labelTitle = "진지충 FM 타입";
+              break;
+
+            default:
+              labelTitle = "알수없음";
+          }
+          var label =
+            "<div class='army-label d-flex align-items-center'>" +
+            labelTitle +
+            "</div>";
+          var bar =
+            "<div class='bar-container position-relative container'><div class='" +
+            prediction[i].className +
+            "-box'></div><div class='d-flex justify-content-center align-items-center " +
+            prediction[i].className +
+            "-bar' style='width: " +
+            barWidth +
+            "'><span class='d-block percent-text'>" +
+            Math.round(prediction[i].probability.toFixed(2) * 100) +
+            "%</span></div></div>";
+          labelContainer.childNodes[i].innerHTML = label + bar;
+        }
+      }
+    </script>
+    <!-- Machine Model -->
+  </body>
+  <!-- Copyright (c) 2022 by Milomir Topic (https://codepen.io/siremilomir/pen/jBbQGo)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ -->
+</html>
