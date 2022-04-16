@@ -104,6 +104,8 @@ h1 small {
 
 .filesample{
     display: none;
+    -webkit-filter:grayscale(100%);
+    filter: gray;
 }
 
 
