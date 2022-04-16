@@ -12,7 +12,8 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="style.css" />
-
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
     <script
       src="https://kit.fontawesome.com/c2a3ad07ff.js"
       crossorigin="anonymous"
@@ -161,7 +162,7 @@
       async function predict() {
         // predict can take in an image, video or canvas html element
         var image = document.getElementById("face-image");
-        
+
         console.log(image);
         const prediction = await model.predict(image, false);
 
