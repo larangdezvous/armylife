@@ -60,6 +60,7 @@
             style="background-color: rgb(147, 247, 134)"
           ></label>
         </div>
+
         <div class="avatar-preview">
           <div
             id="imagePreview"
@@ -67,7 +68,14 @@
           ></div>
           <img class="filesample" id="face-image" src="img/army.jpg" />
         </div>
+        <div id="loading" class="animated bounce">
+          <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <p class="text-center">AI가 당신의 군생활을 분석중입니다.</p>
+        </div>
         <div><p class="result-message"></p></div>
+
         <div id="label-container"></div>
       </div>
     </div>
@@ -109,6 +117,7 @@
         if (input.files && input.files[0]) {
           var reader = new FileReader();
           reader.onload = function (e) {
+            $("#loading").show();
             $("#imagePreview").css(
               "background-image",
               "url(" + e.target.result + ")"
@@ -124,6 +133,7 @@
         readURL(this);
         init().then(() => {
           predict();
+          $("#loading").hide();
         });
       });
     </script>
@@ -210,7 +220,7 @@
           case "Class8":
             resultMessage = "탈영각 보이는 개또라이 선임 타입";
             resultExplain =
-              "&nbsp;자대갔는데 이런 얼굴 보이면 탈영해야함. 사람을 이런 방식으로도 털 수 있구나 하는 생각이 들 정도로 멘탈 탈수기임.<br> 말투부터 범상치 않은 경우가 많음.<br> 후임을 너무 잘 갈궈서 선임들이  다른 후임 털고있는거 보면 웃길때도 있어서 조심해야함.<br> 같이 근무설때 재밌는 이야기 준비 안해가면 개털릴 준비 해야함. 웃는 순간 나한테도 화살이 돌아옴.<br>사회에서 만나면 자기는 애들 갈궜던거 기억도 못하고 애들이 다 자기 좋아했다고 함.";
+              "&nbsp;자대갔는데 이런 얼굴 보이면 탈영해야함. 사람을 이런 방식으로도 털 수 있구나 하는 생각이 들 정도로 멘탈 탈수기임.<br> 말투부터 범상치 않은 경우가 많음.<br> 후임을 너무 잘 갈궈서 선임들이 좋아하기도 함.<br> 다른 후임 털고있는거 보면 웃길때도 있어서 조심해야함. 웃는 순간 나한테도 화살이 돌아옴.<br> 같이 근무설때 재밌는 이야기 준비 안해가면 개털릴 준비 해야함. 사회에서 만나면 자기는 애들 갈궜던거 기억도 못하고 애들이 다 자기 좋아했다고 함.";
             break;
           case "Class9":
             resultMessage = "알고보면 천사타입";

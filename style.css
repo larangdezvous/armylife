@@ -88,6 +88,10 @@ h1 small {
     background-position: center;
 }
 
+#loading {
+    display: none;
+}
+
 /* 내비바 css */
 .bg-light .container-fluid{
     background-image:url("img/camo.jpg");
