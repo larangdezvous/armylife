@@ -462,3 +462,8 @@ h1 small {
     font-size: 0.8rem;
     color: white
 }
+
+.add-banner {
+    width: 320px;
+    margin: 0 auto;
+}
