@@ -118,89 +118,37 @@ h1 small {
     font-size: 1rem;
 }
 
-.Class1-army-title {
-    color: #48d27d;
-    font-size: 1.5rem;
-    text-align: center;
-}
 
 
-.Class2-army-title {
-    color: #d51c00;
-    font-size: 1.5rem;
-    text-align: center;
-}
 
 
-.Class3-army-title {
-    color: #d35500;
-    font-size: 1.5rem;
-    text-align: center;
-}
 
 
-.Class4-army-title {
-    color: #004dac;
-    font-size: 1.5rem;
-    text-align: center;
-}
 
 
-.Class5-army-title {
-    color: #b0003e;
-    font-size: 1.5rem;
-    text-align: center;
-}
 
 
-.Class6-army-title {
-    color: #a94c00;
-    font-size: 1.5rem;
-    text-align: center;
-}
 
 
-.Class7-army-title {
-    color: #00769b;
-    font-size: 1.5rem;
-    text-align: center;
-}
 
-.Class8-army-title {
-    color: #2e0060;
-    font-size: 1.5rem;
-    text-align: center;
-}
 
-.Class9-army-title {
-    color: #709200;
-    font-size: 1.5rem;
-    text-align: center;
-}
 
-.Class10-army-title {
-    color: #0b8500;
-    font-size: 1.5rem;
-    text-align: center;
-}
 
-.Class11-army-title {
-    color: #448e7e;
-    font-size: 1.5rem;
-    text-align: center;
-}
 
-.Class12-army-title {
-    color: #335384;
-    font-size: 1.5rem;
-    text-align: center;
-}
 
-.Class13-army-title {
-    color: #9c9c00;
-    font-size: 1.5rem;
-    text-align: center;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .bar-container {
     height: 2.7rem;
@@ -210,252 +158,57 @@ h1 small {
     text-align: left;
 }
 
-.Class1-box {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 2rem;
-    border-radius: 10px;
-    width: 100%;
-    background-color: #9adbb3;
-}
 
-.Class1-bar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 2rem;
-    border-radius: 10px;
-    background-color: #3ba363;
-}
 
-.Class2-box {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 2rem;
-    border-radius: 10px;
-    width: 100%;
-    background-color: #fce5e1;
-}
 
-.Class2-bar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 2rem;
-    border-radius: 10px;
-    background-color: #a71f0a;
-}
 
-.Class3-box {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 2rem;
-    border-radius: 10px;
-    width: 100%;
-    background-color: #e1b598;
-}
 
-.Class3-bar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 2rem;
-    border-radius: 10px;
-    background-color: #a44303;
-}
 
-.Class4-box {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 2rem;
-    border-radius: 10px;
-    width: 100%;
-    background-color: #86a7cf;
-}
 
-.Class4-bar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 2rem;
-    border-radius: 10px;
-    background-color: #003980;
-}
 
-.Class5-box {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 2rem;
-    border-radius: 10px;
-    width: 100%;
-    background-color: #cc9dae;
-}
 
-.Class5-bar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 2rem;
-    border-radius: 10px;
-    background-color: #690226;
-}
 
-.Class6-box {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 2rem;
-    border-radius: 10px;
-    width: 100%;
-    background-color: #bf9877;
-}
 
-.Class6-bar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 2rem;
-    border-radius: 10px;
-    background-color: #502400;
-}
 
-.Class7-box {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 2rem;
-    border-radius: 10px;
-    width: 100%;
-    background-color: #a9d2de;
-}
 
-.Class7-bar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 2rem;
-    border-radius: 10px;
-    background-color: #00222c;
-}
 
-.Class8-box {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 2rem;
-    border-radius: 10px;
-    width: 100%;
-    background-color: #9061c2;
-}
 
-.Class8-bar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 2rem;
-    border-radius: 10px;
-    background-color: #2e0060;
-}
 
-.Class9-box {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 2rem;
-    border-radius: 10px;
-    width: 100%;
-    background-color: #d2dfa5;
-}
 
-.Class9-bar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 2rem;
-    border-radius: 10px;
-    background-color: #415500;
-}
 
-.Class10-box {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 2rem;
-    border-radius: 10px;
-    width: 100%;
-    background-color: #69b462;
-}
 
-.Class10-bar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 2rem;
-    border-radius: 10px;
-    background-color: #053e00;
-}
 
-.Class11-box {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 2rem;
-    border-radius: 10px;
-    width: 100%;
-    background-color: #54b19d;
-}
 
-.Class11-bar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 2rem;
-    border-radius: 10px;
-    background-color: #1a3630;
-}
 
-.Class12-box {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 2rem;
-    border-radius: 10px;
-    width: 100%;
-    background-color: #fbcced;
-}
 
-.Class12-bar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 2rem;
-    border-radius: 10px;
-    background-color: #c10288;
-}
 
-.Class13-box {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 2rem;
-    border-radius: 10px;
-    width: 100%;
-    background-color: #e7e7af;
-}
 
-.Class13-bar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 2rem;
-    border-radius: 10px;
-    background-color: #646400;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .percent-text{
     position: relative;
@@ -466,4 +219,26 @@ h1 small {
 .add-banner {
     width: 320px;
     margin: 0 auto;
+}
+
+.army-title {
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.type-box {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 2rem;
+    border-radius: 10px;
+    width: 100%;
+}
+
+.type-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 2rem;
+    border-radius: 10px;
 }
